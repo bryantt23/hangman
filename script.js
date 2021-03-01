@@ -37,4 +37,50 @@ class Hangman {
       }
     });
   }
+
+  tryGuess(c) {
+    if (this.alreadyAttemptedChar(c)) {
+      console.log('that has already been attempted');
+      return false;
+    }
+
+    this.attemptedChars.add(c);
+    let indices = this.getMatchingIndices(c);
+    if (indices.length === 0) {
+      this.remainingIncorrectGuesses--;
+    } else {
+      this.fillIndices(c, indices);
+    }
+
+    return true;
+  }
+
+  askUserForGuess() {
+    let c = prompt('Enter a char:');
+    const guess = this.tryGuess(c);
+  }
+
+  isWin() {
+    if (this.randomWord === this.guessWord.join('')) {
+      console.log('YOU WIN');
+      return true;
+    }
+    return false;
+  }
+
+  isLoss() {
+    if (this.remainingIncorrectGuesses === 0) {
+      console.log('YOU LOSE');
+      return true;
+    }
+    return false;
+  }
+
+  isGameOver() {
+    if (this.isWin() || this.isLoss()) {
+      console.log(`The word was ${this.randomWord}`);
+      return true;
+    }
+    return false;
+  }
 }
