@@ -9,7 +9,7 @@ class Hangman {
   }
 
   randomWord = () => {
-    return DICTIONARY[Math.floor(Math.random() * DICTIONARY.length)];
+    return this.DICTIONARY[Math.floor(Math.random() * this.DICTIONARY.length)];
   };
 
   alreadyAttemptedChar(c) {
@@ -29,7 +29,7 @@ class Hangman {
   }
 
   fillIndices(replacementChar, replacementIndices) {
-    guessWord = guessWord.split('').map((c, i) => {
+    this.guessWord = this.guessWord.map((c, i) => {
       if (replacementIndices.includes(i)) {
         return replacementChar;
       } else {
@@ -56,12 +56,18 @@ class Hangman {
   }
 
   askUserForGuess() {
+    console.log(
+      `Incorrect Guesses Remaining: ${this.remainingIncorrectGuesses}`
+    );
+    console.log(`Attempted Chars: ${Array.from(this.attemptedChars)}`);
+    console.log(`Word: ${this.guessWord}`);
     let c = prompt('Enter a char:');
-    const guess = this.tryGuess(c);
+    console.log(c);
+    this.tryGuess(c);
   }
 
   isWin() {
-    if (this.randomWord === this.guessWord.join('')) {
+    if (this.secretWord === this.guessWord.join('')) {
       console.log('YOU WIN');
       return true;
     }
@@ -78,9 +84,19 @@ class Hangman {
 
   isGameOver() {
     if (this.isWin() || this.isLoss()) {
-      console.log(`The word was ${this.randomWord}`);
+      console.log(`The word was ${this.secretWord}`);
       return true;
     }
     return false;
   }
+
+  start() {
+    console.log(JSON.stringify(this));
+    while (!this.isGameOver()) {
+      this.askUserForGuess();
+    }
+  }
 }
+
+const game = new Hangman();
+game.start();
